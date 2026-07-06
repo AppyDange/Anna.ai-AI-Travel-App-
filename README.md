@@ -380,6 +380,12 @@ Search history is clearable and shows recent queries with enough context to unde
        alt="Anna.ai Hi-Fi Prototype Demo" width="25%" />
 </p>
 
+**PRD Preview (Product Requirement Document)**
+
+<p align="center">
+  <img src="https://github.com/apurva-dange/anna_ai_pm_case_study/blob/main/prd%20(1).gif?raw=true" 
+       alt="Anna.ai PRD Document Demo" width="40%" />
+</p>
 
 ## 🛠️ Tools I Used
 
