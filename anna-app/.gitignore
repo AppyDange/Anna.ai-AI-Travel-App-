@@ -1,0 +1,27 @@
+node_modules
+.next
+out
+dist
+build
+*.tsbuildinfo
+
+# Environment — never commit these
+.env
+.env.local
+.env.*.local
+
+# Recorded API responses (kept out of git; regenerate with MODE=record)
+fixtures/
+
+# Eval output
+eval-runs/
+
+# Editor / OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Logs
+*.log
+npm-debug.log*
