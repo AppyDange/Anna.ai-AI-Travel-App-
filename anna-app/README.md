@@ -43,7 +43,7 @@ points at an official source — being right by luck is still a policy failure.
 | --- | --- | --- |
 | Framework | Next.js (App Router) | Native streaming for the SSE planning endpoint; server routes hold every key |
 | Database / auth / realtime | Supabase | Postgres + magic-link auth + Realtime in one free tier; RLS enforces trip access |
-| Model | Claude (Anthropic) | Tool-use loop with streaming |
+| Model | OpenRouter | OpenAI-compatible tool-use loop with streaming; model swappable via `OPENROUTER_MODEL` |
 | Styling | Tailwind v4 | CSS-first config in `app/globals.css` |
 
 ---
@@ -52,12 +52,12 @@ points at an official source — being right by luck is still a policy failure.
 
 ### 1. Credentials
 
-Copy `.env.example` to `.env` and fill it in. **Only Anthropic needs a credit
-card** — everything else here has a genuine free tier with no card required.
+Copy `.env.example` to `.env` and fill it in. **Only OpenRouter needs credits
+loaded** — everything else here has a genuine free tier with no card required.
 
 | Service | Gives you | Card? |
 | --- | --- | --- |
-| [Anthropic](https://console.anthropic.com) | The conversational core | Yes |
+| [OpenRouter](https://openrouter.ai) | The conversational core, routed to whichever model `OPENROUTER_MODEL` names | Yes |
 | [Supabase](https://supabase.com) | Postgres, auth, realtime | No |
 | [Amadeus Self-Service](https://developers.amadeus.com) | Flights, hotels, IATA lookup | No |
 | [OpenRouteService](https://openrouteservice.org) | Travel time (feasibility gate) | No |
@@ -66,8 +66,13 @@ card** — everything else here has a genuine free tier with no card required.
 | Open-Meteo | Weather | No key at all |
 | Frankfurter | Currency conversion | No key at all |
 
-Set a **$50 spend cap** in the Anthropic console while you are there. Expected
-spend across the whole build is $20–30.
+**Picking `OPENROUTER_MODEL`:** go to [openrouter.ai/models](https://openrouter.ai/models),
+filter by tool/function-calling support, sort by price low→high, then pick.
+Filtering first matters — sorted by price alone, the cheapest results are
+mostly models that can't call tools at all, and this app's entire grounding
+design (never state a price the model didn't get from a tool) depends on
+reliable tool calling. Watch usage in the OpenRouter dashboard; expected spend
+across the whole build is $20–30.
 
 **Apply to [Travelpayouts](https://travelpayouts.com) on day one.** It is the
 affiliate network behind the booking handoff, it approves individual

@@ -17,7 +17,10 @@ export default function Home() {
 
   const core = [
     { name: "Supabase", ready: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) },
-    { name: "Anthropic", ready: Boolean(process.env.ANTHROPIC_API_KEY) },
+    {
+      name: "OpenRouter",
+      ready: Boolean(process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_MODEL),
+    },
   ];
 
   return (

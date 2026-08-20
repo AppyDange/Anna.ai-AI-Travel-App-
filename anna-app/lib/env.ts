@@ -19,7 +19,13 @@ const bootSchema = z.object({
 
 const serverBootSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
-  ANTHROPIC_API_KEY: z.string().min(1),
+  // OpenRouter, not Anthropic directly — an OpenAI-compatible endpoint that
+  // proxies to whichever model OPENROUTER_MODEL names. No default on the
+  // model: it must be a real, currently-listed slug you picked yourself,
+  // filtered by tool-calling support. Guessing one here would be worse than
+  // requiring you to supply it.
+  OPENROUTER_API_KEY: z.string().min(1),
+  OPENROUTER_MODEL: z.string().min(1),
   PROVIDER_MODE: z.enum(["live", "record", "replay"]).default("live"),
 });
 
@@ -57,18 +63,25 @@ export function publicEnv() {
 export function serverEnv() {
   const parsed = serverBootSchema.safeParse({
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+    OPENROUTER_MODEL: process.env.OPENROUTER_MODEL,
     PROVIDER_MODE: process.env.PROVIDER_MODE ?? "live",
   });
   if (!parsed.success) {
     fail(
       parsed.error.issues.map((i) => String(i.path[0])),
       "SUPABASE_SERVICE_ROLE_KEY is in Supabase → Project Settings → API. " +
-        "ANTHROPIC_API_KEY is at console.anthropic.com.",
+        "OPENROUTER_API_KEY is at openrouter.ai/keys. OPENROUTER_MODEL is a " +
+        "model slug from openrouter.ai/models — filter by tool-calling " +
+        "support before picking one, or the grounding gates have nothing " +
+        "reliable to call.",
     );
   }
   return parsed.data;
 }
+
+/** OpenRouter's OpenAI-compatible endpoint. Fixed; not user-configured. */
+export const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 
 /**
  * Per-provider credentials, checked at call time rather than at boot.
